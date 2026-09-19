@@ -1,0 +1,77 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: rgb(209 207 207);
+  font-family: Arial;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.window {
+  width: 300px;
+  margin: auto;
+  padding: 0;
+  border: none;
+}
+
+.header {
+  margin: 0;
+  height: 27px;
+  border: solid;
+  border-radius: 5px 5px 0 0;
+  border-color: rgb(85 85 205);
+  background-color: rgb(85 85 205);
+  color: white;
+}
+
+.main {
+  margin: 0;
+  height: 80px;
+  background-color: azure;
+  border-left: solid azure;
+  border-right: solid azure;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 1.1rem;
+}
+
+.footer {
+  height: 27px;
+  border: solid;
+  border-radius: 0 0 5px 5px;
+  border-color: rgb(85 85 205);
+  background-color: rgb(85 85 205);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+}
+
+.footer button {
+  width: 80px;
+  height: 21px;
+  border: none;
+  border-radius: 4px;
+  background-color: azure;
+  cursor: pointer;
+}
+
+.btn-ok:hover {
+  background-color: rgb(12 161 69);
+}
+
+.btn-cancel:hover {
+  background-color: rgb(199 93 108);
+}
