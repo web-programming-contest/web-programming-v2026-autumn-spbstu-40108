@@ -1,0 +1,42 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.scene {
+  position: relative;
+  width: 280px;
+  margin: 40px auto;
+}
+
+.box-center {
+  position: relative;
+  width: 180px;
+  height: 140px;
+  margin: 0 auto;
+  background-color: green;
+  z-index: 1;
+}
+
+.box-left {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  top: 20px;
+  left: 0;
+  z-index: 0;
+}
+
+.box-right {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: blue;
+  bottom: -20px;
+  right: 0;
+  z-index: 2;
+}
