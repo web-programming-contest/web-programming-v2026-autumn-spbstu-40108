@@ -1,0 +1,36 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flag-bangladesh {
+  position: relative;
+  width: 500px;
+  height: 300px;
+  max-width: 100%;
+  background-color: #006a4e;
+  border: 1px solid #ccc;
+  overflow: hidden;
+}
+
+.flag-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background-color: #f42a41;
+  border-radius: 50%;
+}
