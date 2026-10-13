@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Задача 2. countVowels</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { padding: 6px; width: 260px; }
+    button { padding: 6px 12px; }
+    .result { margin: 10px 0; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h2>Задача 2. countVowels(str)</h2>
+  <input id="text" type="text" value="Hello World, Universe">
+  <button id="count-btn">Посчитать гласные</button>
+  <p class="result" id="count-result"></p>
+
+  <script>
+    // Считает гласные a, e, i, o, u без учёта регистра
+    function countVowels(str) {
+      let count = 0;
+      for (const char of str.toLowerCase()) {   // приводим строку к нижнему регистру
+        if ('aeiou'.includes(char)) {           
+          count++;
+        }
+      }
+      return count;
+    }
+
+    // Проверка в консоли (F12)
+    console.log(countVowels('Hello World'));    // 3
+    console.log(countVowels('AEIOU aeiou'));    // 10
+    console.log(countVowels('rhythm'));         // 0
+
+    // Кнопка на странице
+    document.getElementById('count-btn').addEventListener('click', () => {
+      const text = document.getElementById('text').value;
+      document.getElementById('count-result').textContent =
+        'Гласных букв: ' + countVowels(text);
+    });
+  </script>
+
+</body>
+</html>
