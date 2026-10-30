@@ -31,6 +31,10 @@ export class Game {
 
 export function groupGamesByReleaseYear(games) {
   const grouped = {};
+  if (!Array.isArray(games)) {
+    return grouped;
+  }
+
   for (const game of games) {
     const year = game.releaseYear;
     if (!grouped[year]) {
@@ -38,31 +42,46 @@ export function groupGamesByReleaseYear(games) {
     }
     grouped[year].push(game);
   }
+
   return grouped;
 }
 
 export function getUniquePlatforms(games) {
   const uniq = new Set();
+  if (!Array.isArray(games)) {
+    return [];
+  }
+
   for (const game of games) {
-    for (const platform of game.platforms) {
-      uniq.add(platform);
+    if (Array.isArray(game.platforms)) {
+      for (const platform of game.platforms) {
+        uniq.add(platform);
+      }
     }
   }
+
   return Array.from(uniq);
 }
 
-export function getGamesByPlatform(games, platform) {
-  const result = [];
-  for (const game of games) {
-    if (game.platforms.includes(platform)) {
-      result.push(game);
-    }
+export function findGamesByPlatform(games, platform) {
+  if (!Array.isArray(games)) {
+    return [];
   }
-  return result;
+
+  return games.filter(
+    (game) =>
+      game &&
+      Array.isArray(game.platforms) &&
+      game.platforms.includes(platform),
+  );
 }
 
 export function groupByPlatformCount(games) {
   const grouped = {};
+  if (!Array.isArray(games)) {
+    return grouped;
+  }
+
   for (const game of games) {
     const count = game.platformCount;
     if (!grouped[count]) {
@@ -70,23 +89,26 @@ export function groupByPlatformCount(games) {
     }
     grouped[count].push(game);
   }
+
   return grouped;
 }
 
 export function getGamesReleasedAfter(games, year) {
-  const result = [];
-  for (const game of games) {
-    if (game.releaseYear > year) {
-      result.push(game);
-    }
+  if (!Array.isArray(games)) {
+    return [];
   }
-  return result;
+
+  return games.filter((game) => game.releaseYear > year);
 }
 
 export {
   groupGamesByReleaseYear as groupGameOnYear,
+  groupGamesByReleaseYear as groupByReleaseYear,
   getUniquePlatforms as groupUniqPlatform,
-  getGamesByPlatform as groupGameOnConcretPlatform,
+  findGamesByPlatform as getGamesByPlatform,
+  findGamesByPlatform as groupGameOnConcretPlatform,
   groupByPlatformCount as groupGamesOnCountPlatform,
+  groupByPlatformCount as groupGamesByPlatformCount,
   getGamesReleasedAfter as gamesAfterConcretYear,
+  getGamesReleasedAfter as findGamesReleasedAfter,
 };

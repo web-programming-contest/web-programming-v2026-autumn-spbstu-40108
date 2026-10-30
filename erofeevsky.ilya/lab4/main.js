@@ -1,7 +1,9 @@
 import {Game} from './model.js';
 
 export function delay(ms = 300) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 const STORAGE_KEY = 'games_data';
@@ -109,7 +111,14 @@ export function render() {
         </div>
       </div>
 
-      <button type="button" class="btn-delete-game" data-action="delete" data-testid="entity-delete">Удалить</button>
+      <button
+        type="button"
+        class="btn-delete-game"
+        data-action="delete"
+        data-testid="delete-entity"
+      >
+        Удалить
+      </button>
     `;
 
     list.appendChild(card);
@@ -155,10 +164,14 @@ if (list) {
 
     const gameTitle = card.dataset.title;
 
-    if (target.classList.contains('btn-delete-game')) {
-      target.disabled = true;
+    const deleteBtn = target.closest(
+      '[data-testid="delete-entity"], [data-action="delete"], .btn-delete-game',
+    );
+    if (deleteBtn) {
+      deleteBtn.disabled = true;
       await removeGameAsync(gameTitle);
       render();
+      return;
     }
 
     if (target.classList.contains('btn-remove-platform')) {
@@ -166,6 +179,7 @@ if (list) {
       target.disabled = true;
       await removePlatformFromGameAsync(gameTitle, platform);
       render();
+      return;
     }
 
     if (target.classList.contains('btn-add-platform')) {
