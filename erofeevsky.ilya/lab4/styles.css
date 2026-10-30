@@ -1,0 +1,187 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.game-form {
+  background: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.08);
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+input[type='text'],
+input[type='number'] {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type='text']:focus,
+input[type='number']:focus {
+  border-color: #0056ff;
+}
+
+button {
+  cursor: pointer;
+  font-size: 14px;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  transition:
+    background-color 0.2s,
+    opacity 0.2s;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-submit {
+  background-color: #0056ff;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px;
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #04c;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.game-card {
+  background: #fff;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.game-card h3 {
+  margin: 0 0 10px;
+  font-size: 18px;
+  color: #111;
+}
+
+.game-card p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.platforms-section {
+  margin: 14px 0;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.platforms-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.platform-item {
+  background-color: #e9ecef;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-remove-platform {
+  background: none;
+  color: #dc3545;
+  padding: 0;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.btn-remove-platform:hover:not(:disabled) {
+  color: #a71d2a;
+}
+
+.add-platform-block {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.add-platform-block input {
+  flex: 1;
+  padding: 6px 8px;
+  font-size: 12px;
+}
+
+.btn-add-platform {
+  background-color: #28a745;
+  color: white;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.btn-add-platform:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.btn-delete-game {
+  background-color: #dc3545;
+  color: white;
+  margin-top: 12px;
+  width: 100%;
+}
+
+.btn-delete-game:hover:not(:disabled) {
+  background-color: #c82333;
+}

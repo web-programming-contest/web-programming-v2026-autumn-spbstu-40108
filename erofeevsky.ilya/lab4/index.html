@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Лабораторная работа 4 — Вариант 13</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Каталог игр</h1>
+
+      <form data-testid="entity-form" class="game-form">
+        <div class="form-group">
+          <label for="title">Название игры:</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Например, Cyberpunk 2077"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="releaseYear">Год выпуска:</label>
+          <input
+            type="number"
+            id="releaseYear"
+            name="releaseYear"
+            placeholder="Например, 2020"
+            min="1950"
+            max="2030"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn-submit">Добавить игру</button>
+      </form>
+
+      <section
+        data-testid="entity-list"
+        class="games-grid"
+        aria-label="Список элементов"
+      ></section>
+    </main>
+
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
