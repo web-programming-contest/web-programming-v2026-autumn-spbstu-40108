@@ -1,4 +1,4 @@
-import { Game } from './model.js';
+import {Game} from './model.js';
 
 export function delay(ms = 300) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -16,7 +16,9 @@ export function loadGames() {
   }
 
   const parsed = JSON.parse(rawData);
-  return parsed.map((item) => new Game(item.title, item.platforms, item.releaseYear));
+  return parsed.map(
+    (item) => new Game(item.title, item.platforms, item.releaseYear),
+  );
 }
 
 export function saveGames(dataToSave) {
@@ -64,13 +66,17 @@ export function getGames() {
   return games;
 }
 
-window.addEventListener('beforeunload', () => saveGames(games));
+window.addEventListener('beforeunload', () => {
+  saveGames(games);
+});
 
 const form = document.querySelector('[data-testid="entity-form"]');
 const list = document.querySelector('[data-testid="entity-list"]');
 
 export function render() {
-  if (!list) return;
+  if (!list) {
+    return;
+  }
   list.innerHTML = '';
 
   games.forEach((game) => {
@@ -86,7 +92,7 @@ export function render() {
           <span>${plat}</span>
           <button type="button" class="btn-remove-platform" data-platform="${plat}">✕</button>
         </li>
-      `
+      `,
       )
       .join('');
 
@@ -103,7 +109,7 @@ export function render() {
         </div>
       </div>
 
-      <button type="button" class="btn-delete-game">Удалить</button>
+      <button type="button" class="btn-delete-game" data-action="delete" data-testid="entity-delete">Удалить</button>
     `;
 
     list.appendChild(card);
@@ -118,17 +124,23 @@ if (form) {
     const title = formData.get('title')?.toString().trim();
     const releaseYear = Number(formData.get('releaseYear'));
 
-    if (!title || !releaseYear) return;
+    if (!title || !releaseYear) {
+      return;
+    }
 
     const submitBtn = form.querySelector('button[type="submit"]');
-    if (submitBtn) submitBtn.disabled = true;
+    if (submitBtn) {
+      submitBtn.disabled = true;
+    }
 
     try {
       await addGameAsync(title, releaseYear, []);
       form.reset();
       render();
     } finally {
-      if (submitBtn) submitBtn.disabled = false;
+      if (submitBtn) {
+        submitBtn.disabled = false;
+      }
     }
   });
 }
@@ -137,7 +149,9 @@ if (list) {
   list.addEventListener('click', async (event) => {
     const target = event.target;
     const card = target.closest('[data-testid="entity-card"]');
-    if (!card) return;
+    if (!card) {
+      return;
+    }
 
     const gameTitle = card.dataset.title;
 
@@ -157,7 +171,9 @@ if (list) {
     if (target.classList.contains('btn-add-platform')) {
       const input = card.querySelector('.input-new-platform');
       const platform = input ? input.value.trim() : '';
-      if (!platform) return;
+      if (!platform) {
+        return;
+      }
 
       target.disabled = true;
       await addPlatformToGameAsync(gameTitle, platform);
