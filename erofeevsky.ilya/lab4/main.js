@@ -1,35 +1,33 @@
-import {Game} from './model.js';
+import { Game } from './model.js';
 
 export function delay(ms = 300) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const STORAGE_KEY = 'games_date';
+const STORAGE_KEY = 'games_data';
 
 export function loadGames() {
   const rawData = localStorage.getItem(STORAGE_KEY);
   if (!rawData) {
     return [
-      new Game('The Witcher 3', 2015, ['PC', 'PS4', 'Xbox One']),
-      new Game('Portal 2', 2011, ['PC']),
+      new Game('The Witcher 3', ['PC', 'PS4', 'Xbox One'], 2015),
+      new Game('Portal 2', ['PC'], 2011),
     ];
   }
 
   const parsed = JSON.parse(rawData);
-  return parsed.map(
-    (item) => new Game(item.title, item.releaseYear, item.platforms),
-  );
+  return parsed.map((item) => new Game(item.title, item.platforms, item.releaseYear));
 }
 
-export function saveGames(games) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(games));
+export function saveGames(dataToSave) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
 }
 
 let games = loadGames();
 
 export async function addGameAsync(title, releaseYear, platforms = []) {
   await delay(300);
-  const newGame = new Game(title, releaseYear, platforms);
+  const newGame = new Game(title, platforms, releaseYear);
   games.push(newGame);
   saveGames(games);
   return newGame;
@@ -71,11 +69,13 @@ window.addEventListener('beforeunload', () => saveGames(games));
 const form = document.querySelector('[data-testid="entity-form"]');
 const list = document.querySelector('[data-testid="entity-list"]');
 
-function render() {
+export function render() {
+  if (!list) return;
   list.innerHTML = '';
 
   games.forEach((game) => {
     const card = document.createElement('article');
+    card.setAttribute('data-testid', 'entity-card');
     card.className = 'game-card';
     card.dataset.title = game.title;
 
@@ -86,86 +86,84 @@ function render() {
           <span>${plat}</span>
           <button type="button" class="btn-remove-platform" data-platform="${plat}">✕</button>
         </li>
-      `,
+      `
       )
       .join('');
 
     card.innerHTML = `
       <h3>${game.title}</h3>
-      <p><strong>Год выпуска:</strong> ${game.releaseYear}</p>
-      <p><strong>Количество платформ:</strong> ${game.platformCount}</p>
-
+      <p>Год выпуска: ${game.releaseYear}</p>
+      <p>Количество платформ: ${game.platformCount}</p>
       <div class="platforms-section">
         <strong>Платформы:</strong>
-        <ul>${platformsHtml || '<li>Платформы не указаны</li>'}</ul>
-
+        <ul>${platformsHtml}</ul>
         <div class="add-platform-block">
           <input type="text" placeholder="Новая платформа" class="input-new-platform" />
           <button type="button" class="btn-add-platform">Добавить платформу</button>
         </div>
       </div>
 
-      <button type="button" class="btn-delete-game">Удалить игру</button>
+      <button type="button" class="btn-delete-game">Удалить</button>
     `;
 
     list.appendChild(card);
   });
 }
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
+if (form) {
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-  const formData = new FormData(form);
-  const title = formData.get('title')?.toString().trim();
-  const year = Number(formData.get('releaseYear'));
+    const formData = new FormData(form);
+    const title = formData.get('title')?.toString().trim();
+    const releaseYear = Number(formData.get('releaseYear'));
 
-  if (!title || !year) {
-    alert('Пожалуйста, укажите название и корректный год выпуска!');
-    return;
-  }
+    if (!title || !releaseYear) return;
 
-  const submitBtn = form.querySelector('button[type="submit"]');
-  submitBtn.disabled = true;
+    const submitBtn = form.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
 
-  try {
-    await addGameAsync(title, year);
-    form.reset();
-    render();
-  } finally {
-    submitBtn.disabled = false;
-  }
-});
+    try {
+      await addGameAsync(title, releaseYear, []);
+      form.reset();
+      render();
+    } finally {
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
+}
 
-list.addEventListener('click', async (event) => {
-  const target = event.target;
-  const card = target.closest('.game-card');
-  if (!card) {return;}
+if (list) {
+  list.addEventListener('click', async (event) => {
+    const target = event.target;
+    const card = target.closest('[data-testid="entity-card"]');
+    if (!card) return;
 
-  const gameTitle = card.dataset.title;
+    const gameTitle = card.dataset.title;
 
-  if (target.classList.contains('btn-delete-game')) {
-    target.disabled = true;
-    await removeGameAsync(gameTitle);
-    render();
-  }
+    if (target.classList.contains('btn-delete-game')) {
+      target.disabled = true;
+      await removeGameAsync(gameTitle);
+      render();
+    }
 
-  if (target.classList.contains('btn-remove-platform')) {
-    const platform = target.dataset.platform;
-    target.disabled = true;
-    await removePlatformFromGameAsync(gameTitle, platform);
-    render();
-  }
+    if (target.classList.contains('btn-remove-platform')) {
+      const platform = target.dataset.platform;
+      target.disabled = true;
+      await removePlatformFromGameAsync(gameTitle, platform);
+      render();
+    }
 
-  if (target.classList.contains('btn-add-platform')) {
-    const input = card.querySelector('.input-new-platform');
-    const newPlatform = input.value.trim();
+    if (target.classList.contains('btn-add-platform')) {
+      const input = card.querySelector('.input-new-platform');
+      const platform = input ? input.value.trim() : '';
+      if (!platform) return;
 
-    if (!newPlatform) {return;}
-
-    target.disabled = true;
-    await addPlatformToGameAsync(gameTitle, newPlatform);
-    render();
-  }
-});
+      target.disabled = true;
+      await addPlatformToGameAsync(gameTitle, platform);
+      render();
+    }
+  });
+}
 
 render();
