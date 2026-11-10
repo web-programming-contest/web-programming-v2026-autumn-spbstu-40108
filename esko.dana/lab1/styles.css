@@ -1,0 +1,32 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+nav {
+  background-color: #ffcede;
+}
+
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  display: flex;
+}
+
+nav a {
+  text-decoration: none;
+  color: rgb(13 13 13);
+  padding: 20px;
+  display: block;
+}
+
+nav a:hover {
+  background-color: #ccd6ff;
+}
+
+nav ul .active {
+  font-weight: bold;
+  background-color: #cce5ff;
+  color: #c2185b;
+}
