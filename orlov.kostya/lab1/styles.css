@@ -1,0 +1,175 @@
+:root {
+  color: #20271f;
+  background: #f2f4ee;
+  font-family: 'Trebuchet MS', 'DejaVu Sans', sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+}
+
+.masthead,
+main,
+footer {
+  width: min(100% - 64px, 1120px);
+  margin-inline: auto;
+}
+
+.masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 0;
+  border-bottom: 1px solid #d5d2c7;
+  font:
+    500 11px ui-monospace,
+    monospace;
+  letter-spacing: 0;
+}
+
+.wordmark {
+  color: #20271f;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.wordmark span,
+.course-label,
+.kicker,
+footer {
+  color: #777a6d;
+}
+
+.intro {
+  padding: clamp(54px, 9vw, 110px) 0 56px;
+}
+
+.kicker {
+  margin: 0 0 22px;
+  font:
+    500 11px ui-monospace,
+    monospace;
+  letter-spacing: 0;
+}
+
+h1 {
+  max-width: 760px;
+  margin: 0;
+  font-size: clamp(42px, 7.5vw, 88px);
+  font-weight: 600;
+  line-height: 0.99;
+  letter-spacing: 0;
+}
+
+.lead {
+  margin: 24px 0 0;
+  color: #65695e;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.category-list,
+.product-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.category {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.8fr) 2fr;
+  gap: 48px;
+  padding: 28px 0 34px;
+  border-top: 1px solid #d5d2c7;
+}
+
+.category-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.category-heading h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.category-heading span {
+  color: #8b8d82;
+  font:
+    11px ui-monospace,
+    monospace;
+}
+
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 30px;
+}
+
+.product strong {
+  font-size: 14px;
+}
+
+.product p {
+  min-height: 42px;
+  margin: 8px 0 14px;
+  color: #65695e;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.product em {
+  color: #426044;
+  font:
+    500 13px ui-monospace,
+    monospace;
+  font-style: italic;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 38px;
+  padding: 20px 0 30px;
+  border-top: 1px solid #d5d2c7;
+  font:
+    10px ui-monospace,
+    monospace;
+  letter-spacing: 0;
+}
+
+@media (width <= 680px) {
+  .masthead,
+  main,
+  footer {
+    width: min(100% - 36px, 1120px);
+  }
+
+  .course-label {
+    font-size: 9px;
+  }
+
+  .category {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .product-list {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .product p {
+    min-height: 0;
+  }
+}
