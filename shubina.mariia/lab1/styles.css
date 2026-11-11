@@ -1,0 +1,32 @@
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.card {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+.card img {
+  display: block;
+  width: 200px;
+  height: 150px;
+  padding: 10px;
+}
+
+.card h3 {
+  margin: 0;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.card p {
+  margin: 0;
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
