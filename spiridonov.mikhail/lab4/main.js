@@ -42,6 +42,144 @@ function saveUsers() {
   }
 }
 
+// ==============================================================
+// Асинхронные методы на основе Promise + setTimeout
+// ==============================================================
+
+/**
+ * Асинхронное добавление пользователя через Promise
+ * @param {number} id
+ * @param {string} name
+ * @returns {Promise<User>}
+ */
+export function addUserAsync(id, name) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const numericId = Number(id);
+      const trimmedName = String(name).trim();
+
+      if (!Number.isInteger(numericId) || numericId <= 0) {
+        reject(
+          new Error(
+            'ID пользователя должен быть целым положительным числом (> 0)',
+          ),
+        );
+        return;
+      }
+
+      if (!trimmedName) {
+        reject(new Error('Имя пользователя не может быть пустым'));
+        return;
+      }
+
+      if (users.some((u) => u.id === numericId)) {
+        reject(new Error(`Пользователь с ID ${numericId} уже существует`));
+        return;
+      }
+
+      const newUser = new User(numericId, trimmedName, []);
+      users.push(newUser);
+      saveUsers();
+      resolve(newUser);
+    }, ASYNC_DELAY_MS);
+  });
+}
+
+/**
+ * Асинхронное удаление пользователя через Promise
+ * @param {number} id
+ * @returns {Promise<number>}
+ */
+export function deleteUserAsync(id) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const numericId = Number(id);
+      const initialCount = users.length;
+      users = users.filter((u) => u.id !== numericId);
+
+      if (users.length === initialCount) {
+        reject(new Error(`Пользователь с ID ${numericId} не найден`));
+        return;
+      }
+
+      saveUsers();
+      resolve(numericId);
+    }, ASYNC_DELAY_MS);
+  });
+}
+
+/**
+ * Асинхронное добавление друга пользователю через Promise
+ * @param {number} userId
+ * @param {number} friendId
+ * @returns {Promise<User>}
+ */
+export function addFriendAsync(userId, friendId) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const targetUser = users.find((u) => u.id === Number(userId));
+      if (!targetUser) {
+        reject(new Error(`Пользователь с ID ${userId} не найден`));
+        return;
+      }
+
+      const numericFriendId = Number(friendId);
+      if (!Number.isInteger(numericFriendId) || numericFriendId <= 0) {
+        reject(
+          new Error('ID друга должен быть целым положительным числом (> 0)'),
+        );
+        return;
+      }
+
+      if (numericFriendId === targetUser.id) {
+        reject(
+          new Error('Пользователь не может добавить самого себя в друзья'),
+        );
+        return;
+      }
+
+      try {
+        const added = targetUser.addFriend(numericFriendId);
+        if (!added) {
+          reject(new Error(`Друг с ID ${numericFriendId} уже есть в списке`));
+          return;
+        }
+        saveUsers();
+        resolve(targetUser);
+      } catch (err) {
+        reject(err);
+      }
+    }, ASYNC_DELAY_MS);
+  });
+}
+
+/**
+ * Асинхронное удаление друга у пользователя через Promise
+ * @param {number} userId
+ * @param {number} friendId
+ * @returns {Promise<User>}
+ */
+export function removeFriendAsync(userId, friendId) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const targetUser = users.find((u) => u.id === Number(userId));
+      if (!targetUser) {
+        reject(new Error(`Пользователь с ID ${userId} не найден`));
+        return;
+      }
+
+      const removed = targetUser.removeFriend(Number(friendId));
+      if (!removed) {
+        reject(new Error(`Друг с ID ${friendId} не найден в списке друзей`));
+        return;
+      }
+
+      saveUsers();
+      resolve(targetUser);
+    }, ASYNC_DELAY_MS);
+  });
+}
+
 function renderUsers() {
   if (!list) {
     return;
@@ -138,6 +276,8 @@ function renderUsers() {
     const friendInput = document.createElement('input');
     friendInput.className = 'form-input form-input-sm';
     friendInput.type = 'number';
+    friendInput.min = '1';
+    friendInput.step = '1';
     friendInput.placeholder = 'ID друга';
     friendInput.required = true;
 
@@ -156,7 +296,7 @@ function renderUsers() {
 }
 
 if (form) {
-  form.addEventListener('submit', (event) => {
+  form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const idInput = form.querySelector('[name="id"]');
@@ -169,27 +309,38 @@ if (form) {
     const id = Number(idInput.value);
     const name = nameInput.value.trim();
 
-    if (!id || !name) {
+    if (!Number.isInteger(id) || id <= 0) {
+      alert('ID пользователя должен быть целым положительным числом (> 0)!');
+      return;
+    }
+
+    if (!name) {
+      alert('Введите имя пользователя!');
       return;
     }
 
     if (users.some((u) => u.id === id)) {
+      alert(
+        `Пользователь с ID ${id} уже существует! ID должен быть уникальным.`,
+      );
       return;
     }
 
     form.reset();
 
-    // Асинхронное добавление сущности через setTimeout
-    setTimeout(() => {
-      users.push(new User(id, name, []));
-      saveUsers();
+    // Асинхронное добавление пользователя через Promise (await)
+    try {
+      await addUserAsync(id, name);
       renderUsers();
-    }, ASYNC_DELAY_MS);
+    } catch (error) {
+      console.error('Ошибка добавления пользователя:', error);
+      alert(error.message);
+    }
   });
 }
 
 if (list) {
-  list.addEventListener('click', (event) => {
+  list.addEventListener('click', async (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) {
       return;
@@ -199,12 +350,13 @@ if (list) {
     if (deleteBtn instanceof HTMLElement && deleteBtn.dataset.userId) {
       const targetId = Number(deleteBtn.dataset.userId);
 
-      // Асинхронное удаление сущности через setTimeout
-      setTimeout(() => {
-        users = users.filter((u) => u.id !== targetId);
-        saveUsers();
+      // Асинхронное удаление пользователя через Promise (await)
+      try {
+        await deleteUserAsync(targetId);
         renderUsers();
-      }, ASYNC_DELAY_MS);
+      } catch (error) {
+        console.error('Ошибка удаления пользователя:', error);
+      }
       return;
     }
 
@@ -216,19 +368,18 @@ if (list) {
     ) {
       const userId = Number(removeFriendBtn.dataset.userId);
       const friendId = Number(removeFriendBtn.dataset.friendId);
-      const targetUser = users.find((u) => u.id === userId);
 
-      if (targetUser) {
-        setTimeout(() => {
-          targetUser.removeFriend(friendId);
-          saveUsers();
-          renderUsers();
-        }, ASYNC_DELAY_MS);
+      // Асинхронное удаление друга через Promise (await)
+      try {
+        await removeFriendAsync(userId, friendId);
+        renderUsers();
+      } catch (error) {
+        console.error('Ошибка удаления друга:', error);
       }
     }
   });
 
-  list.addEventListener('submit', (event) => {
+  list.addEventListener('submit', async (event) => {
     event.preventDefault();
     const target = event.target;
     if (!(target instanceof HTMLFormElement)) {
@@ -242,21 +393,24 @@ if (list) {
     }
 
     const friendId = Number(input.value);
-    const targetUser = users.find((u) => u.id === userId);
-
-    if (!targetUser || !friendId) {
+    if (!Number.isInteger(friendId) || friendId <= 0) {
+      alert('ID друга должен быть целым положительным числом (> 0)!');
       return;
     }
 
-    setTimeout(() => {
-      try {
-        targetUser.addFriend(friendId);
-        saveUsers();
-        renderUsers();
-      } catch (err) {
-        console.warn('Не удалось добавить друга:', err);
-      }
-    }, ASYNC_DELAY_MS);
+    if (friendId === userId) {
+      alert('Пользователь не может добавить самого себя в друзья!');
+      return;
+    }
+
+    // Асинхронное добавление друга через Promise (await)
+    try {
+      await addFriendAsync(userId, friendId);
+      renderUsers();
+    } catch (err) {
+      console.warn('Не удалось добавить друга:', err);
+      alert(err.message);
+    }
   });
 }
 

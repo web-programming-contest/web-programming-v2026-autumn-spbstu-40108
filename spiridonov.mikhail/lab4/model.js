@@ -3,7 +3,9 @@ export class User {
     this.id = Number(id);
     this.name = String(name);
     this.friends = Array.isArray(friends)
-      ? [...new Set(friends.map(Number))].filter((fId) => fId !== this.id)
+      ? [...new Set(friends.map(Number))].filter(
+          (fId) => Number.isInteger(fId) && fId > 0 && fId !== this.id,
+        )
       : [];
   }
 
@@ -13,6 +15,9 @@ export class User {
 
   addFriend(friendId) {
     const id = Number(friendId);
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new Error('ID друга должен быть положительным целым числом (> 0).');
+    }
     if (id === this.id) {
       throw new Error('Пользователь не может добавить самого себя в друзья.');
     }
@@ -31,6 +36,29 @@ export class User {
       return true;
     }
     return false;
+  }
+
+  // Асинхронные методы на промисах (Promise + setTimeout)
+  addFriendAsync(friendId, delayMs = 80) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          const result = this.addFriend(friendId);
+          resolve(result);
+        } catch (error) {
+          reject(error);
+        }
+      }, delayMs);
+    });
+  }
+
+  removeFriendAsync(friendId, delayMs = 80) {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const result = this.removeFriend(friendId);
+        resolve(result);
+      }, delayMs);
+    });
   }
 }
 
