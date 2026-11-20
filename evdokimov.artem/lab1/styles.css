@@ -1,0 +1,50 @@
+.form-row {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: center;
+}
+
+main {
+  max-width: 500px;
+  margin: 100px auto;
+}
+
+button {
+  background-color: white;
+  color: black;
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: gray 3px solid;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+button:hover {
+  border-color: transparent;
+  outline: skyblue 4px solid;
+}
+
+body {
+  background-color: black;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+input[type='text'] {
+  background-color: black;
+  color: white;
+  border: 1px solid gray;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+input[type='text']:focus {
+  outline: skyblue 2px solid;
+}
+
+h1 {
+  text-align: center;
+}
