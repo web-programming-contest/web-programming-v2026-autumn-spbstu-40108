@@ -1,0 +1,31 @@
+{
+  "name": "gadget-hub",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gadget Hub — интернет-магазин надежных гаджетов",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n \"сервер,клиент\" -c blue,magenta \"npm run start:dev -w backend\" \"npm run dev -w frontend\"",
+    "dev:backend": "npm run start:dev -w backend",
+    "dev:frontend": "npm run dev -w frontend",
+    "build": "npm run build -w backend && npm run build -w frontend",
+    "db:generate": "npm run db:generate -w backend",
+    "db:migrate": "npm run db:migrate -w backend",
+    "db:seed": "npm run db:seed -w backend",
+    "db:verify": "npm run db:verify -w backend",
+    "db:studio": "npm run db:studio -w backend",
+    "verify:stage1": "bash scripts/verify-stage-1.sh",
+    "verify:stage2": "node scripts/verify-stage-2.mjs",
+    "verify:assets": "node scripts/verify-assets.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  }
+}
