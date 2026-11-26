@@ -1,7 +1,7 @@
 export function countOccurrences(arr) {
-  let result = {};
+  const result = {};
 
-  for (let item of arr) {
+  for (const item of arr) {
     result[item] = (result[item] || 0) + 1;
   }
 
