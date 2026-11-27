@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Лента постов</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="main.js"></script>
+  </head>
+  <body>
+    <main>
+      <h1>Лента постов</h1>
+      <h2>Новый пост</h2>
+      <form data-testid="entity-form">
+        <label>
+          Номер поста
+          <input
+            id="post-id"
+            name="id"
+            type="number"
+            min="1"
+            step="1"
+            placeholder="Автоматически"
+          />
+        </label>
+        <label>
+          Заголовок
+          <input id="post-title" name="title" type="text" required />
+        </label>
+        <label>
+          Текст поста
+          <textarea id="post-content" name="content" rows="3"></textarea>
+        </label>
+        <label>
+          Теги через запятую
+          <input id="post-tags" name="tags" type="text" />
+        </label>
+        <button type="submit">Добавить пост</button>
+      </form>
+      <p role="alert" data-error></p>
+      <h2>Посты (<span data-count>0</span>)</h2>
+      <label>
+        Поиск по тегу
+        <input id="tag-search" type="search" placeholder="Например, учёба" />
+      </label>
+      <section aria-label="Список постов" data-testid="entity-list"></section>
+      <p data-empty>Постов пока нет.</p>
+    </main>
+  </body>
+</html>
