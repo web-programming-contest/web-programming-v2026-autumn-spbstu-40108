@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Вариант 20 - задание 4</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Каналы и подписчики</h1>
+      <p>Вариант 20. Задание 4.</p>
+      <h2>Добавить канал</h2>
+      <form data-testid="entity-form">
+        <label>
+          ID канала
+          <input type="number" name="id" min="1" step="1" required />
+        </label>
+        <label>
+          Название канала
+          <input type="text" name="name" required />
+        </label>
+        <button type="submit">Добавить канал</button>
+      </form>
+      <p id="message" class="status-message" role="status"></p>
+      <h2>Список каналов</h2>
+      <section data-testid="entity-list"></section>
+      <h2>Работа с массивом каналов</h2>
+      <section class="collection-results">
+        <h3>Каналы по количеству подписчиков</h3>
+        <ul id="channels-by-count"></ul>
+
+        <h3>Уникальные подписчики</h3>
+        <ul id="unique-subscribers"></ul>
+
+        <h3>Каналы с заданным подписчиком</h3>
+        <form id="subscriber-search">
+          <label>
+            Имя подписчика для поиска
+            <input type="text" name="subscriber" required />
+          </label>
+          <button type="submit">Найти каналы</button>
+        </form>
+        <ul id="subscriber-channels"></ul>
+
+        <h3>Подписчик - каналы</h3>
+        <ul id="channels-by-subscriber"></ul>
+
+        <h3>Каналы с максимальным количеством подписчиков</h3>
+        <ul id="most-subscribed-channels"></ul>
+      </section>
+    </main>
+    <template id="channel-template">
+      <article class="channel-card" data-testid="entity-card">
+        <h3>Название канала</h3>
+        <p class="channel-id"></p>
+        <p class="subscriber-count"></p>
+        <ul></ul>
+        <p class="empty-subscribers">Подписчиков пока нет.</p>
+        <form class="subscriber-form">
+          <label>
+            Имя подписчика
+            <input type="text" name="subscriber" required />
+          </label>
+          <button type="submit">Добавить подписчика</button>
+        </form>
+        <button
+          type="button"
+          class="delete-channel"
+          data-testid="delete-entity"
+        >
+          Удалить канал
+        </button>
+      </article>
+    </template>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
